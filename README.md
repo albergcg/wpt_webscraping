@@ -1,2 +1,5 @@
-# wpt_webscraping
-Construcción de un conjunto de datos de jugadores profesionales del World Padel Tour mediante Web Scraping.
+# World Padel Tour - Top 50 Dataset
+
+> Autor: Alberto García Galindo
+
+> Asignatura: M2.851 - Tipología y ciclo de vida de los datos
