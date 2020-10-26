@@ -1,7 +1,7 @@
 World Padel Tour - Top 50 Dataset
 ---
 
-> Autor: Alberto García Galindo
+> Autores: Alberto García Galindo y Federico Alejandro Floriano Pardal
 
 > Asignatura: M2.851 - Tipología y ciclo de vida de los datos
 
