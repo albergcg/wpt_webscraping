@@ -22,7 +22,7 @@ Para ello, se partirá de la página web donde se muestra la clasificación de l
 Estructura del proyecto
 ---
 
-- `[informe]`(https://github.com/albergcg/wpt_webscraping/tree/main/informe). En este fichero encontramos el informe técnico del proyecto realizado, el contexto en el que se ha realizado e información sobre el conjunto de datos generado.
-- `[scrapers]`(https://github.com/albergcg/wpt_webscraping/tree/main/scrapers). En este fichero encontramos el script que, al ejecutarse, realizará la obtención de los datos de los jugadores y los almacenará en un archvio csv.
-- `[dataset](https://github.com/albergcg/wpt_webscraping/tree/main/dataset). Conjunto de datos resultante del proyecto.
-- `[notebooks](https://github.com/albergcg/wpt_webscraping/tree/main/notebooks). Jupyter Notebooks con explicación detallada del código desarrollado para llevar a cabo el proyecto. Se incluye una primera exploración del sitio web, una documentación explicativa del código del script para la obtención de datos y un primer análisis del conjunto de datos resultante.
+- [informe](https://github.com/albergcg/wpt_webscraping/tree/main/informe). En este fichero encontramos el informe técnico del proyecto realizado, el contexto en el que se ha realizado e información sobre el conjunto de datos generado.
+- [scrapers](https://github.com/albergcg/wpt_webscraping/tree/main/scrapers). En este fichero encontramos el script que, al ejecutarse, realizará la obtención de los datos de los jugadores y los almacenará en un archvio csv.
+- [dataset](https://github.com/albergcg/wpt_webscraping/tree/main/dataset). Conjunto de datos resultante del proyecto.
+- [notebooks](https://github.com/albergcg/wpt_webscraping/tree/main/notebooks). Jupyter Notebooks con explicación detallada del código desarrollado para llevar a cabo el proyecto. Se incluye una primera exploración del sitio web, una documentación explicativa del código del script para la obtención de datos y un primer análisis del conjunto de datos resultante.
