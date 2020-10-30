@@ -16,5 +16,3 @@ Objetivo
 ---
 
 En esta práctica se plantea el objetivo de utilizar técnicas de *web scraping* en el lenguaje de programación Python para la construcción de un conjunto de datos con la información de los 50 mejores jugadores del ránking [World Padel Tour](https://www.worldpadeltour.com/).
-
-- `[informe]`(https://github.com/albergcg/wpt_webscraping/tree/main/informe)
