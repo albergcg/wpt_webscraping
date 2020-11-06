@@ -30,7 +30,7 @@ Cabe mencionar que, en el ámbito de este deporte, la analítica de datos aún n
 
 ## 3. Descripción del conjunto de datos
 
-Como resultado del ejercicio de *web scraping*, se ha obtenido un conjunto de datos...
+Como resultado del ejercicio de *web scraping*, se ha obtenido un conjunto de datos que contiene la información de los 200 mejores jugadores de padel actuales (los 100 mejores del ranking masculino y las 100 mejores del ranking femenino). Los datos extraídos de cada uno de ellos se detallan en el apartado 5.
 
 ## 4. Representación gráfica
 
@@ -64,10 +64,28 @@ Por otra parte, para cada uno de los años disponibles (entre 2013 y 2020), se r
 
 ## 6. Agradecimientos
 
+La información fue recopilada desde la página web del World Padel Tour, que actualiza los datos de cada torneo y las variaciones correspondientes en el ranking al día siguiente de la finalización de cada uno de ellos.
+
 ## 7. Inspiración
+
+El conjunto de datos es de interés para conocer algunos datos personales y deportivos de los mejores jugadores actuales de padel. De manera adicional, los datos reflejan la trayectoria de resultados de cada uno de ellos desde 2013 hasta la fecha, así como algunas estadísticas globales. Todo ello podría ser de utilidad para cualquier análisis periodístico que se quisiera realizar en relación al Padel y sus figuras principales a día de hoy.
 
 ## 8. Licencia
 
+## 9. Código
+
+El código para la realización del web scraping ha sido desarrollado en lenguaje Python, y se encuentra en el archivo XXXX.py dentro del repositorio.
+
+## 10. Dataset
+
+El dataset ha sido publicado en Zenodo con DOI...
+
+## 11. Tabla de contribuciones al trabajo:
+
+Contribuciones/Firma
+Investigación previa:	Alberto García Galindo, Alejandro Floriano Pardal
+Redacción de las respuestas:	Alberto García Galindo, Alejandro Floriano Pardal
+Desarrollo del código:	Alberto García Galindo, Alejandro Floriano Pardal
 
 
 
