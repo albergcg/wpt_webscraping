@@ -1,5 +1,6 @@
 import csv
 import time
+from tqdm import tqdm
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
@@ -27,6 +28,8 @@ class WPTScraper():
         Run Chrome driver in headless mode (without UI -> faster).
         '''
         options_chrome = Options()
+        user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/5\ 37.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
+        options_chrome.add_argument(f"user-agent={user_agent}")
         options_chrome.add_argument('--window-size=920,1480')
         options_chrome.add_argument('--headless') # Headless mode
         self.driver_chrome = Chrome(driver_path, options=options_chrome)
@@ -34,6 +37,9 @@ class WPTScraper():
         
         # Wait until webpage is completely loaded (a maximum of 10 secs)
         WebDriverWait(self.driver_chrome, 10).until(visibility_of_element_located((By.XPATH, '//*[@id="site-container"]')))
+        
+        # Respect crawl delay specified in robots.txt
+        time.sleep(10)
         
     def scroll_to_top_player(self):
         '''
@@ -43,6 +49,7 @@ class WPTScraper():
         topX_found = None
         
         while topX_found == None:
+            time.sleep(10)
             self.driver_chrome.execute_script('window.scrollBy(0, 1000)') # Execute JS under the hood...
             try:
                 # When topX player web element is found -> exit while loop
@@ -52,13 +59,13 @@ class WPTScraper():
             
     def get_links(self):
         '''
-        Store each player link inside a list.
+        Store each player link.
         '''
         self.men_links = []        
         for position in range(1, self.topX + 1):
             player_xpath = f'//*[@id="site-container"]/div[4]/div/div[1]/ul/li[{str(position)}]/a'
             player_element = WebDriverWait(self.driver_chrome, 10).until(visibility_of_element_located((By.XPATH, player_xpath)))
-            player_link = player_element.get_attribute('href')
+            player_link = player_element.get_attribute('href') # Get link reference
             self.men_links.append(player_link)
             
         self.women_links = []
@@ -69,28 +76,72 @@ class WPTScraper():
             self.women_links.append(player_link)
             
     def scrap_years(self, link):
-       '''
-       Scrap matchs/tournaments statistics every year since 2013 for a given player.
-       '''
+        '''
+        Scrap matchs/tournaments statistics every available year since 2013 for a given player.
+        '''
         years_info = []
-        driver_chrome.execute_script('window.scrollBy(0, 1000)')
+        self.driver_chrome.execute_script('window.scrollBy(0, 1000)')
         
-        for year_div in range(1, 9):
+        year_selector = self.driver_chrome.find_element_by_xpath("//*[@name='ranking-year']")
+        all_options = year_selector.find_elements_by_tag_name("option")
+ 
+        available_years = []
+        for year in all_options[1:]:
+            available_years.append(year.get_attribute("value"))
+        
+        year_div = 1
+        for year in reversed(range(2013, 2021)):
+            year_info = []
+            if str(year) in available_years:
+                year_selector = self.driver_chrome.find_element_by_class_name('c-form__select-options')
+                self.driver_chrome.execute_script('arguments[0].style.display="block";', year_selector)
+                year_xpath = f'//*[@id="site-container"]/div[3]/div/div/div/div/div/ul/li[{year_div+1}]'            
+                year = self.driver_chrome.find_element_by_xpath(year_xpath)
+                ActionChains(self.driver_chrome).move_to_element(year).click().perform()
             
-            year_selector = self.driver_chrome.find_element_by_class_name('c-form__select-options')
-            self.driver_chrome.execute_script('arguments[0].style.display="block";', year_selector)
-            year_xpath = f'//*[@id="site-container"]/div[3]/div/div/div/div/div/ul/li[{year_div+1}]'            
-            year = driver_chrome.find_element_by_xpath(year_xpath)
-            ActionChains(driver_chrome).move_to_element(year).click().perform()
+                year_table_xpath = f'//*[@id="site-container"]/div[4]/div[{year_div}]'
             
-            year_table_xpath = f'//*[@id="site-container"]/div[4]/div[{year_div}]'
+                played_year_xpath = year_table_xpath + "/div[1]/ul/li[1]/span[2]"
+                played_year = WebDriverWait(self.driver_chrome, 30).until(visibility_of_element_located((By.XPATH, played_year_xpath))).text
+                year_info.append(played_year)
             
-            played_year_xpath = year_table_xpath + "/div[1]/ul/li[1]/span[2]"
-            played_year = WebDriverWait(self.driver_chrome, 30).until(visibility_of_element_located((By.XPATH, played_year_xpath))).text
-            years_info.append(played_year)
+                won_year_xpath = year_table_xpath + "/div[1]/ul/li[2]/span[2]"
+                won_year = self.driver_chrome.find_element_by_xpath(won_year_xpath).text
+                year_info.append(won_year)
+            
+                lost_year = int(played_year) - int(won_year)
+                year_info.append(lost_year)
+            
+                try:
+                    performance_year = int(won_year) / int(played_year)
+                except ZeroDivisionError:
+                    performance_year = 0
+                
+                year_info.append(performance_year)
+            
+                champ_year_xpath = year_table_xpath + "/div[2]/ul/li[1]/span[2]"
+                champ_year = self.driver_chrome.find_element_by_xpath(champ_year_xpath).text
+                year_info.append(champ_year)
+        
+                runnerup_year_xpath = year_table_xpath + "/div[2]/ul/li[2]/span[2]"
+                runnerup_year = self.driver_chrome.find_element_by_xpath(runnerup_year_xpath).text
+                year_info.append(runnerup_year)
+                
+                year_div += 1
+                
+            else:
+                year_info += ("?" * 6)
+                
+            years_info += year_info
+            
+        return years_info
             
     def scrap_player(self, link, ranking):
-        self.driver_chrome.get(link)        
+        '''
+        Scrap all player data for a given player, including base info and year statistics.
+        '''
+        self.driver_chrome.get(link)
+        time.sleep(10)
         player_data = []
         if ranking == 1:
             header_xpath = f'//*[@id="site-container"]/div[1]/div/div[1]/div[1]'
@@ -115,10 +166,11 @@ class WPTScraper():
     
         position_xpath = '//*[@id="site-container"]/div[1]/div/div[2]/div[2]/ul[1]/li[2]/p'
         court_position = WebDriverWait(self.driver_chrome, 3).until(visibility_of_element_located((By.XPATH, position_xpath))).text
-        player_data.append(court)
+        player_data.append(court_position)
     
         personal_data_xpath = '//*[@id="site-container"]/div[1]/div/div[1]/ul/li[2]/a'
         WebDriverWait(self.driver_chrome, 20).until(visibility_of_element_located((By.XPATH, personal_data_xpath))).click()
+        time.sleep(10)
     
         birthplace_xpath = '//*[@id="site-container"]/div[1]/div/div[2]/div[2]/ul[2]/li[1]/p'
         birthplace = WebDriverWait(self.driver_chrome, 3).until(visibility_of_element_located((By.XPATH, birthplace_xpath))).text
@@ -154,13 +206,82 @@ class WPTScraper():
         consecutive = WebDriverWait(self.driver_chrome, 30).until(visibility_of_element_located((By.XPATH, consecutive_xpath))).text
         player_data.append(consecutive)
         
+        years_info = self.scrap_years(link)
+        player_data += years_info
+        
+        return player_data
+        
             
-    def start_scraper(self):
-        self.init_driver("D:\Alberto\Archivos de programa\chromedriver.exe")
+    def start_scraper(self, output_file='world_padel_tour_dataset.csv'):
+        '''
+        Start web sraping!
+        '''
+        start_time = time.time()
+        print(f'World Padel Tour Dataset from {self.url}')
+        print(f'(!) This process can take about 30 min.')
+        
+        self.run_driver('D:\Alberto\Archivos de programa\chromedriver.exe')
         self.scroll_to_top_player()
         self.get_links()
         
-        for link in self.men_links:
+        with open(output_file, 'w') as file:
+            
+            base_features = [
+                'Nombre',
+                'Ranking',
+                'Puntuación',
+                'Comapañero',
+                'Posición',
+                'Lugar de Nacimiento',
+                'Fecha de Nacimiento',
+                'Altura',
+                'Residencia',
+                'Partidos jugados',
+                'Partidos ganados',
+                'Partidos perdidios',
+                'Rendimiento',
+                'Racha'
+            ]
+            
+            years_features = []
+            for year in reversed(range(2013, 2021)):
+                year_features = []
+                year_features += base_features[9:13] + ['Torneos ganados', 'Finales']
+                year_features = [str(year) + feature for feature in year_features]
+                years_features += year_features
+                
+            player_features = base_features + years_features
+            player_features.append('Circuito')
+            
+            for feature in player_features:
+                file.write(feature + ';')
+            file.write('\n')
+            
+            print(f'Scraping top {self.topX} male players info...')
+
+            for ranking, link in enumerate(tqdm(self.men_links), 1):
+                player_data = self.scrap_player(link, ranking)
+                player_data.append('Masculino')
+                for data in player_data:
+                    file.write(str(data) + ';')
+                file.write('\n')
+                
+            print(f'Scraping top {self.topX} female players info...')
+
+            
+            for ranking, link in enumerate(tqdm(self.women_links), 1):
+                player_data = self.scrap_player(link, ranking)
+                player_data.append('Femenino')
+                for data in player_data:
+                    file.write(str(data) + ';')
+                file.write('\n')
+            
+            end_time = time.time()
+            elapsed_time = round(((end_time - start_time) / 60) , 2)
+            
+            print('Scraping was completed.')
+            print(f'Elapsed time: {elapsed_time} minutes.')
+        
             
         
         
