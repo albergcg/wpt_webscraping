@@ -2,7 +2,7 @@
 title: "Tipología y ciclo de vida de los datos"
 subtitle: "PRA1 - Web Scraping"
 author: "Alberto García Galindo y Federico Alejandro Floriano Pardal"
-date: "26 de octubre de 2020"
+date: "7 de noviembre de 2020"
 output: pdf_document
 ---
 
@@ -12,17 +12,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## 0. Introducción
 
-En este documento se expone el informe final del caso práctico resuelto de *web scraping* acerca de la construcción de un conjunto de datos con información de los mejores jugadores de padel del mundo. En concreto, se extrajo información del sitio web del World Padel Tour y se recogió información tanto de la clasificación mundial masculina como femenina.
+En este documento se expone el informe final del caso práctico resuelto de *web scraping* enmarcado en el contexto de la resolución de la práctica 1 de la asignatura **Tipología y ciclo de vida de los datos** del **Máster en Ciencia de Datos (*Data Science*)** de la **Universitat Oberta de Catalunya**.
 
-Para ello, se utilizó Python como herramienta principal, destacando el uso de la librería Selenium, especialmente útil a la hora de trabajar con páginas web dinámicas como a la que nos hemos enfrentado. 
+En esta práctica se ha llevado a cabo la construcción de un conjunto de datos con información de los mejores jugadores de padel del mundo. En concreto, se extrajo información del sitio web del World Padel Tour y se recogió información tanto de la clasificación mundial masculina como femenina.
+
+Para ello, se utilizó `Python` como herramienta principal, destacando el uso de la librería `Selenium`, especialmente útil a la hora de trabajar con páginas web dinámicas como a la que nos hemos enfrentado. 
 
 ## 1. Contexto
 
-A día de hoy, el pádel se sitúa como uno de los deportes más en auge de España. Cada vez son más las personas que disfrutan de él a todos los niveles y que lo practican de manera habitual. A nivel profesional, el circuito profesional del World Padel Tour se sitúa como el principal campeonato en el ámbito internacional, donde los mejores jugadores y jugadoras recorren el mundo compitiendo y proporcionando un espectáculo único.
+A día de hoy, el pádel se sitúa como uno de los deportes más en auge de España. Cada vez son más las personas que disfrutan de él a todos los niveles y que lo practican de manera habitual. A nivel profesional, el circuito profesional del World Padel Tour se sitúa como el principal campeonato internacional, donde los mejores jugadores y jugadoras recorren el mundo compitiendo y proporcionando un espectáculo único.
 
-En este contexto se enmarca la elaboración de esta práctica, que pretende realizar un ejercicio de *web scraping* para extraer de la página oficial de World Padel Tour la información tanto personal como deportiva de los mejores jugadores y jugadores del mundo. Para ello, accederemos a la página web de la clasificación y exploraremos la manera de elaborar un conjunto de datos que permita la posterior explotación de los mismos. 
+No obstante, es un deporte relativamente reciente y que principalmente es practicado por hispanohablantes, por lo que su popularidad aun no llega a la de otras disciplinas como el tenis o el fútbol. En consecuencia, es uno de esos campos en los que la analítica de datos todavía no ha irrumpido con la misma magnitud que en otros ámbitos, y las contribuciones a nivel de bases de datos, investigación o tecnología son escasas.
 
-Cabe mencionar que, en el ámbito de este deporte, la analítica de datos aún no he irrumpido con la misma magnitud que en otros deportes como el fútbol o el tenis, por lo que la publicación del conjunto de datos resultante supondrá uno de las primeras contribuciones.
+En este contexto se enmarca la elaboración de esta práctica, que pretende realizar un ejercicio de *web scraping* para extraer, de la página oficial de World Padel Tour, información tanto personal como deportiva de los mejores jugadores y jugadores del mundo, y construir un conjunto de datos con dicha información. El resultado del ejercicio supondrá el primer conjunto de datos abierto de jugadores de padel profesional y una de las primeras contribuciones a nivel internacional.
 
 ## 2. Título del conjunto de datos
 
@@ -30,47 +32,66 @@ Cabe mencionar que, en el ámbito de este deporte, la analítica de datos aún n
 
 ## 3. Descripción del conjunto de datos
 
-Como resultado del ejercicio de *web scraping*, se ha obtenido un conjunto de datos que contiene la información de los 200 mejores jugadores de padel actuales (los 100 mejores del ranking masculino y las 100 mejores del ranking femenino). Los datos extraídos de cada uno de ellos se detallan en el apartado 5.
+Como resultado del ejercicio de *web scraping*, se ha obtenido un conjunto de datos que contiene la información de los 200 mejores jugadores de padel actuales del circuito World Padel Tour: los 100 mejores del ranking masculino y las 100 mejores del ranking femenino. Se extrayeron tanto características personales de los jugadores como deportivas, incluyendo datos relativos a su carrera profesional completa como los resultados de competeción más destacables obtenidos en los años mas recientes . En el apartado 5 se encuentra una descripción más detallada de los campos obtenidos del conjunto de datos.
 
 ## 4. Representación gráfica
+
+
 
 ## 5. Contenido
 
 A continuación se detallan cada una de las características que han sido recogidas para cada uno de los profesionales.
 
 - **Nombre**: Nombre del jugador en el formato recogido por la página de World Padel Tour.
-- **Posición**: Posición en el ránking World Padel Tour.
-- **Puntos**: Puntuación actual.
+- **Posición**: Posición actualizada en el ránking World Padel Tour.
+- **Puntos**: Puntuación actualizada según el sistema de puntuación de World Padel Tour.
 - **Compañero**: Compañero profesional actual del jugador.
-- **Pista**: Posición habitual en pista del jugador: izquierda o derecha.
+- **Pista**: Posición habitual en pista del jugador: *izquierda* o *derecha*.
 - **Lugar de nacimiento**: Lugar de nacimiento del jugador.
-- **Edad**: Edad del jugador en años.
-- **Altura**: Altura del jugador.
-- **Residencia**: Lugar de residencia del jugador.
+- **Edad**: Edad del jugador en años, en formato decimal.
+- **Altura**: Altura del jugador en metros.
+- **Residencia**: Lugar de residencia habitual del jugador.
 - **Partidos jugados**: Número total de partidos jugados desde que se tienen registros en World Padel Tour.
 - **Partidos ganados**: Número total de partidos ganados.
 - **Partidos perdidos**: Número total de partidos perdidos.
 - **Rendimiento**: Porcentaje total de victorias.
 - **Racha**: Mayor racha de partidos ganados de manera consecutiva.
+- **Circuito**. Circuito al que pertenece el jugador: *masculino* o *femenino*
 
-Por otra parte, para cada uno de los años disponibles (entre 2013 y 2020), se recogieron algunas características adicionales:
+Por otra parte, para cada uno de los años disponibles en cada jugador, se recogieron algunas características adicionales:
 
-- **Partidos jugados**
-- **Partidos ganados**
-- **Partidos perdidos**
-- **Rendimiento**
+- **Partidos jugados**.
+- **Partidos ganados**.
+- **Partidos perdidos**.
+- **Rendimiento**.
 - **Torneos**: Número de torneos ganados.
-- **Finales**: Número de veces en los que el jugador llegó a la final y la perdió.
+- **Finales**: Número de finales alcanzadas (sin conseguir el título).
+
+Las variables recogidas en el conjunto de datos en el momento de su extracción (7 de noviembre de 2020) se encuentran actualizados con fecha del 30 de marzo de 2020, tal y como se recoje en la página oficial. Dicho desfase se debe a la parada en la actualización en consecuencia de la pandemia causada por la enfermedad del SARS-CoV-2. Cabe mencionar que, en condicones normales, la frecuencia de actulización de la clasificación del World Padel Tour es semanal.
 
 ## 6. Agradecimientos
 
-La información fue recopilada desde la página web del World Padel Tour, que actualiza los datos de cada torneo y las variaciones correspondientes en el ranking al día siguiente de la finalización de cada uno de ellos.
+En primer lugar, nos gustaría agradecer a World Padel Tour la creación y mantenimiento de su página web oficial. No solo se agredece la facilidad a la hora de poder acceder a los datos de sus jugadores, sino también la disponibilidad de documentos adicionales para comprender, por ejemplo, el sistema de puntuación por torneos o las medidas adoptadas dada la situación excepcional de pandemia.
+
+Por otra parte, nos gustaría agradecer también a la organización la permisividad a la hora de poder acceder al contenido de su sitio web, estableciendo muy pocas limitaciones a la hora de rastrearlas o, en nuestro caso, poder realizar de manera satisfactoria un ejercicio de *web scraping*. En respuesta, los autores hemos intentado en todo momento seguir unas buenas prácticas y unos principios éticos a la hora de realizar el proyecto, buscando no saturar el servidor del sitio web con un número muy elevado de peticiones consecutivas.
+
+Finalmente, como en cualquier proyecto que utilice recursos *open source*, nos gustaría dar las gracias a todas las personas que hacen posible la existencia de herramientas como `Python` o ``Selenium`.
 
 ## 7. Inspiración
 
-El conjunto de datos es de interés para conocer algunos datos personales y deportivos de los mejores jugadores actuales de padel. De manera adicional, los datos reflejan la trayectoria de resultados de cada uno de ellos desde 2013 hasta la fecha, así como algunas estadísticas globales. Todo ello podría ser de utilidad para cualquier análisis periodístico que se quisiera realizar en relación al Padel y sus figuras principales a día de hoy.
+Existen una serie de factores que motivan a la creación del conjunto de datos reportado. Como ya hemos dicho, dicho conjunto de datos supone una de las primeras contribuciones en el ámbito del pádel en cuanto a material, lo que obviamente supone un añadido motivacional.
+
+A nivel de análisis, surgen muchas posibilidades que pueden resultar interesantes. Por ejemplo, podemos obtener una visión comparativa entre jugadores en base a sus resultados a lo largo de su carrera, como por ejemplo, su efectividad o el número de partidos jugados. Por otra parte, al disponer de datos históricos de temporadas anteriores, podemos establecer análisis temporales que nos permitan conocer la evolución de algunos jugadores, y poder visualizar, por ejemplo, como han ido emergiendo a lo largo de los años algunos de los jugadores que hoy en día si sitúan entre los 10 mejores del mundo. Otra opción podría ser, dado un enfrentamiento en un torneo oficial, establecer una comparativa entre los 4 jugadores y conocer, por ejemplo, qué pareja acumula más partidos en la presente temporada, lo que podría traducirse en un mayor deterioro físico.
+
+Todos estos ejemplos de análisis no parecen muy complejos. No obstante, podría resultar todo un añadido a la hora de complementar información adicional en la retransmisión de los partidos durante los torneos y enriquecer la experiencia del espectador.
+
+Finalmente, nos gustaría comentar que este conjunto de datos podría utilizarse como base para futuras mejoras que incorporasen, por ejemplo, estadísticas específicas de golpes por partido y otros factores determinantes del juego. Toda esa información, no obsante, a día de hoy no puede obtenerse del sitio web oficial de World Padel Tour, y animamos a la organización a que algún día puede recogerse y ser accesible para el público general.
 
 ## 8. Licencia
+
+Tanto para el repositorio como para el conjunto de datos hemos decidio definir como licencia *MIT License*. Entendemos que, para un ámbito que tanto está por explorar y que tanto necesita de colaboradores que contribuyan al mismo, debemos de utilizar una licencia muy permisiva.
+
+
 
 ## 9. Código
 
