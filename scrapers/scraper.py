@@ -229,16 +229,16 @@ class WPTScraper():
             base_features = [
                 'Nombre',
                 'Ranking',
-                'Puntuación',
-                'Comapañero',
-                'Posición',
-                'Lugar de Nacimiento',
-                'Fecha de Nacimiento',
+                'Puntuacion',
+                'Comapanero',
+                'Posicion',
+                'LugarNacimiento',
+                'FechaNacimiento',
                 'Altura',
                 'Residencia',
-                'Partidos jugados',
-                'Partidos ganados',
-                'Partidos perdidios',
+                'PartidosJugados',
+                'PartidosGanados',
+                'PartidosPerdidios',
                 'Rendimiento',
                 'Racha'
             ]
@@ -247,7 +247,7 @@ class WPTScraper():
             for year in reversed(range(2013, 2021)):
                 year_features = []
                 year_features += base_features[9:13] + ['Torneos ganados', 'Finales']
-                year_features = [str(year) + feature for feature in year_features]
+                year_features = [str(year) + '_' + feature for feature in year_features]
                 years_features += year_features
                 
             player_features = base_features + years_features
