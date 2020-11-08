@@ -24,5 +24,5 @@ Estructura del proyecto
 
 - `informe`. En este fichero encontramos el informe técnico del proyecto realizado, el contexto en el que se ha realizado e información sobre el conjunto de datos generado.
 - `scrapers`. En este fichero encontramos el script `main.py` que, al ejecutarse, invocará a la clase `WPTScraper` y procederá a la obtención de los datos de los jugadores y los almacenará en un archvio csv.
-- `dataset`. Conjunto de datos resultante del proyecto, con la información de los 200 jugadores.
+- `dataset`. Conjunto de datos resultante del proyecto, con la información de los 100 jugadores y jugadoras.
 - `notebooks`. Jupyter Notebooks información adicional del proyecto. Se incluye una primera exploración del sitio web y un primer análisis del conjunto de datos resultante.
