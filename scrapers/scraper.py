@@ -218,13 +218,13 @@ class WPTScraper():
         '''
         start_time = time.time()
         print(f'World Padel Tour Dataset from {self.url}')
-        print(f'(!) This process can take about 30 min.')
+        print(f'(!) This process can take almost 1h.')
         
         self.run_driver(driver_path)
         self.scroll_to_top_player()
         self.get_links()
         
-        with open(output_file, 'w') as file:
+        with open(output_file, 'a') as file:
             
             base_features = [
                 'Nombre',
