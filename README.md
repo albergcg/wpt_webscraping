@@ -15,7 +15,7 @@ Este repositorio se enmarca en la elaboración de la práctica 1 de *web scrapin
 Objetivo
 ---
 
-En esta práctica se plantea el objetivo de utilizar técnicas de *web scraping* en el lenguaje de programación Python para la construcción de un conjunto de datos con la información de los 100 mejores jugadores y las 100 mejores jugadoras del ránking [World Padel Tour](https://www.worldpadeltour.com/).
+En esta práctica se plantea el objetivo de utilizar técnicas de *web scraping* en el lenguaje de programación Python para la construcción de un conjunto de datos con la información de los 50 mejores jugadores y las 50 mejores jugadoras del ránking [World Padel Tour](https://www.worldpadeltour.com/).
 
 Para ello, se partirá de la página web donde se muestra la clasificación de los mejores jugadores y jugadoras del mundo. Exploraremos la información de los jugadores y obtendremos algunas características interesantes como su posición, su altura o los resultados en las competiciones de anteriores campaañs.
 
