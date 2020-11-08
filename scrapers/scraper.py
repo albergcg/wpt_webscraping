@@ -220,7 +220,7 @@ class WPTScraper():
         print(f'World Padel Tour Dataset from {self.url}')
         print(f'(!) This process can take about 30 min.')
         
-        self.run_driver('D:\Alberto\Archivos de programa\chromedriver.exe')
+        self.run_driver(driver_path)
         self.scroll_to_top_player()
         self.get_links()
         
@@ -281,20 +281,3 @@ class WPTScraper():
             
             print('Scraping was completed.')
             print(f'Elapsed time: {elapsed_time} minutes.')
-        
-            
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
