@@ -238,7 +238,7 @@ class WPTScraper():
                 'Residencia',
                 'PartidosJugados',
                 'PartidosGanados',
-                'PartidosPerdidios',
+                'PartidosPerdidos',
                 'Rendimiento',
                 'Racha'
             ]
