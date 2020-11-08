@@ -1,4 +1,4 @@
-World Padel Tour - Top 100 Dataset
+World Padel Tour - Top 50 Dataset
 ---
 
 > Autores: Alberto García Galindo y Federico Alejandro Floriano Pardal
