@@ -1,5 +1,5 @@
 import sys
-sys.path.append(0, '../')
+sys.path.insert(0, '../')
 import scraper
 
 chrome_driver_path = 'D:\Alberto\Archivos de programa\chromedriver.exe'
