@@ -218,7 +218,7 @@ class WPTScraper():
         '''
         start_time = time.time()
         print(f'World Padel Tour Dataset from {self.url}')
-        print(f'(!) This process can take almost 1h.')
+        print(f'(!) This process can take about 45 min.')
         
         self.run_driver(driver_path)
         self.scroll_to_top_player()
