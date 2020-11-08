@@ -1,6 +1,6 @@
-import csv
+import csv 
 import time
-from tqdm import tqdm
+from tqdm import tqdm # Progress bar
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
@@ -43,7 +43,7 @@ class WPTScraper():
         
     def scroll_to_top_player(self):
         '''
-        Scroll ranking website until all players are visible, needed for getting every link.
+        Scroll ranking website until all players are loaded, needed for getting every link.
         '''
         topX_xpath = f'//*[@id="site-container"]/div[4]/div/div[1]/ul/li[{self.topX}]/a/div[1]/div[1]/div[1]'
         topX_found = None
@@ -65,7 +65,7 @@ class WPTScraper():
         for position in range(1, self.topX + 1):
             player_xpath = f'//*[@id="site-container"]/div[4]/div/div[1]/ul/li[{str(position)}]/a'
             player_element = WebDriverWait(self.driver_chrome, 10).until(visibility_of_element_located((By.XPATH, player_xpath)))
-            player_link = player_element.get_attribute('href') # Get link reference
+            player_link = player_element.get_attribute('href') # Get player link reference
             self.men_links.append(player_link)
             
         self.women_links = []
@@ -84,21 +84,31 @@ class WPTScraper():
         
         year_selector = self.driver_chrome.find_element_by_xpath('//*[@name="ranking-year"]')
         all_options = year_selector.find_elements_by_tag_name("option")
- 
+        
+        # Get available years for a scpecific player
         available_years = []
         for year in all_options[1:]:
             available_years.append(year.get_attribute('value'))
         
+        
         year_div = 1
         for year in reversed(range(2013, 2021)):
             year_info = []
+            
+            # Check if year (from 2020 to 2013) is available
             if str(year) in available_years:
                 year_selector = self.driver_chrome.find_element_by_class_name('c-form__select-options')
+                
+                # Run JS for displaying year selector
                 self.driver_chrome.execute_script('arguments[0].style.display="block";', year_selector)
+                
                 year_xpath = f'//*[@id="site-container"]/div[3]/div/div/div/div/div/ul/li[{year_div+1}]'            
                 year = self.driver_chrome.find_element_by_xpath(year_xpath)
+                
+                # Click on year
                 ActionChains(self.driver_chrome).move_to_element(year).click().perform()
-            
+                
+                # Scrap year statistics            
                 year_table_xpath = f'//*[@id="site-container"]/div[4]/div[{year_div}]'
             
                 played_year_xpath = year_table_xpath + '/div[1]/ul/li[1]/span[2]'
@@ -111,7 +121,8 @@ class WPTScraper():
             
                 lost_year = int(played_year) - int(won_year)
                 year_info.append(lost_year)
-            
+                
+                # Solve zero division problem
                 try:
                     performance_year = int(won_year) / int(played_year)
                 except ZeroDivisionError:
@@ -128,7 +139,8 @@ class WPTScraper():
                 year_info.append(runnerup_year)
                 
                 year_div += 1
-                
+            
+            # If year is not available, current year statistics are unknown
             else:
                 year_info += ('?' * 6)
                 
@@ -143,11 +155,14 @@ class WPTScraper():
         self.driver_chrome.get(link)
         time.sleep(10)
         player_data = []
+        
+        # Top 1 player has a different web page structure
         if ranking == 1:
             header_xpath = f'//*[@id="site-container"]/div[1]/div/div[1]/div[1]'
         else:
             header_xpath = f'//*[@id="site-container"]/div[1]/div/div[1]/div[2]'
         
+        # Scrap player data
         name_xpath = header_xpath + '/div/h1'
         name = WebDriverWait(self.driver_chrome, 3).until(visibility_of_element_located((By.XPATH, name_xpath))).text
         player_data.append(name)
@@ -167,7 +182,8 @@ class WPTScraper():
         position_xpath = '//*[@id="site-container"]/div[1]/div/div[2]/div[2]/ul[1]/li[2]/p'
         court_position = WebDriverWait(self.driver_chrome, 3).until(visibility_of_element_located((By.XPATH, position_xpath))).text
         player_data.append(court_position)
-    
+        
+        # Display player personal data by click (and set 10 secs delay).
         personal_data_xpath = '//*[@id="site-container"]/div[1]/div/div[1]/ul/li[2]/a'
         WebDriverWait(self.driver_chrome, 20).until(visibility_of_element_located((By.XPATH, personal_data_xpath))).click()
         time.sleep(10)
@@ -226,6 +242,7 @@ class WPTScraper():
         
         with open(output_file, 'a') as file:
             
+            # Player features names
             base_features = [
                 'Nombre',
                 'Ranking',
@@ -244,6 +261,8 @@ class WPTScraper():
             ]
             
             years_features = []
+            
+            # Year statistics feature names
             for year in reversed(range(2013, 2021)):
                 year_features = []
                 year_features += base_features[9:13] + ['Torneos ganados', 'Finales']
@@ -253,13 +272,14 @@ class WPTScraper():
             player_features = base_features + years_features
             player_features.append('Circuito')
             
+            # Write features names
             for feature in player_features:
                 file.write(feature + ';')
             file.write('\n')
             
             print(f'Scraping top {self.topX} male players info...')
 
-            for ranking, link in enumerate(tqdm(self.men_links), 1):
+            for ranking, link in enumerate(tqdm(self.men_links), 1): # Display loop progress bar
                 player_data = self.scrap_player(link, ranking)
                 player_data.append('Masculino')
                 for data in player_data:
