@@ -29,7 +29,7 @@ class WPTScraper():
         '''
         options_chrome = Options()
         user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/5\ 37.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
-        options_chrome.add_argument(f"user-agent={user_agent}")
+        options_chrome.add_argument(f'user-agent={user_agent}')
         options_chrome.add_argument('--window-size=920,1480')
         options_chrome.add_argument('--headless') # Headless mode
         self.driver_chrome = Chrome(driver_path, options=options_chrome)
@@ -82,12 +82,12 @@ class WPTScraper():
         years_info = []
         self.driver_chrome.execute_script('window.scrollBy(0, 1000)')
         
-        year_selector = self.driver_chrome.find_element_by_xpath("//*[@name='ranking-year']")
+        year_selector = self.driver_chrome.find_element_by_xpath('//*[@name="ranking-year"]')
         all_options = year_selector.find_elements_by_tag_name("option")
  
         available_years = []
         for year in all_options[1:]:
-            available_years.append(year.get_attribute("value"))
+            available_years.append(year.get_attribute('value'))
         
         year_div = 1
         for year in reversed(range(2013, 2021)):
@@ -101,11 +101,11 @@ class WPTScraper():
             
                 year_table_xpath = f'//*[@id="site-container"]/div[4]/div[{year_div}]'
             
-                played_year_xpath = year_table_xpath + "/div[1]/ul/li[1]/span[2]"
+                played_year_xpath = year_table_xpath + '/div[1]/ul/li[1]/span[2]'
                 played_year = WebDriverWait(self.driver_chrome, 30).until(visibility_of_element_located((By.XPATH, played_year_xpath))).text
                 year_info.append(played_year)
             
-                won_year_xpath = year_table_xpath + "/div[1]/ul/li[2]/span[2]"
+                won_year_xpath = year_table_xpath + '/div[1]/ul/li[2]/span[2]'
                 won_year = self.driver_chrome.find_element_by_xpath(won_year_xpath).text
                 year_info.append(won_year)
             
@@ -119,18 +119,18 @@ class WPTScraper():
                 
                 year_info.append(performance_year)
             
-                champ_year_xpath = year_table_xpath + "/div[2]/ul/li[1]/span[2]"
+                champ_year_xpath = year_table_xpath + '/div[2]/ul/li[1]/span[2]'
                 champ_year = self.driver_chrome.find_element_by_xpath(champ_year_xpath).text
                 year_info.append(champ_year)
         
-                runnerup_year_xpath = year_table_xpath + "/div[2]/ul/li[2]/span[2]"
+                runnerup_year_xpath = year_table_xpath + '/div[2]/ul/li[2]/span[2]'
                 runnerup_year = self.driver_chrome.find_element_by_xpath(runnerup_year_xpath).text
                 year_info.append(runnerup_year)
                 
                 year_div += 1
                 
             else:
-                year_info += ("?" * 6)
+                year_info += ('?' * 6)
                 
             years_info += year_info
             
@@ -212,7 +212,7 @@ class WPTScraper():
         return player_data
         
             
-    def start_scraper(self, output_file='world_padel_tour_dataset.csv'):
+    def start_scraper(self, driver_path, output_file='../dataset/world_padel_tour_dataset.csv'):
         '''
         Start web sraping!
         '''
