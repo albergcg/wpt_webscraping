@@ -153,7 +153,7 @@ A lo largo del proyecto, los autores nos hemos enfrentado a una serie de problem
 
 ## Dataset
 
-El dataset ha sido publicado en Zenodo con DOI 10.5281/zenodo.4263268 (`https://zenodo.org/record/4263268`)
+El dataset ha sido publicado en Zenodo con DOI 10.5281/zenodo.4263268. Para acceder a la referencia, diríjase a `https://zenodo.org/record/4263268`.
 
 ## Contribuciones
 
